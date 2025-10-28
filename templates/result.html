@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prediction Result</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --blue:#2563eb; --bg:#f8fafc; --card:#ffffff; --muted:#6b7280; --rail:#e5e7eb; }
+    *{box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:#0f172a;margin:0}
+    .wrap{max-width:840px;margin:64px auto;padding:0 16px}
+    .card{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(2,6,23,.06);padding:32px 40px}
+    h1{font-size:36px;margin:0 0 24px 0}
+    .badge{display:inline-block;background:#fee2e2;color:#7f1d1d;padding:6px 12px;border-radius:999px;font-weight:600}
+    .bar{height:12px;background:var(--rail);border-radius:999px;overflow:hidden;margin:14px 0 10px}
+    .fill{height:100%;background:var(--blue);width:0}
+    .cta{margin-top:22px}
+    .btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;
+         padding:12px 18px;border-radius:12px;border:0;cursor:pointer}
+    .muted{color:var(--muted);margin-top:8px}
+    .percent{font-weight:700;margin-top:4px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Prediction Result</h1>
+
+      <!-- Risk label -->
+      <div>
+        <span class="badge">{{ risk_label or 'Risk' }}</span>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="bar" aria-label="Probability of claim" aria-valuemin="0" aria-valuemax="100"
+           aria-valuenow="{{ (prob*100)|round(1) if prob is defined else (probability|default(0)) }}">
+        <div class="fill" style="width:{{ (prob*100)|round(1) if prob is defined else probability }}%"></div>
+      </div>
+
+      <!-- Percent and message -->
+      <div class="percent">{{ (prob*100)|round(1) if prob is defined else probability }}% chance of claim.</div>
+      {% if message %}
+      <p class="muted">{{ message }}</p>
+      {% endif %}
+
+      <div class="cta">
+        <a href="{{ url_for('index') }}" class="btn">Try Another Prediction</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

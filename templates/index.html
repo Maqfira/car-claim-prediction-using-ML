@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Car Insurance Claim Prediction</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <style>
+    body { background:#f7f9fc; }
+    .card { border:0; box-shadow:0 10px 30px rgba(0,0,0,.08); border-radius:16px; }
+    .form-label { font-weight:600; }
+    .title { font-weight:800; letter-spacing:.3px; }
+  </style>
+</head>
+<body>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-7">
+        <div class="card p-4 p-md-5">
+          <h1 class="title mb-4 text-center">Car Insurance Claim Prediction</h1>
+
+          <form action="/predict" method="POST" novalidate>
+            <!-- Age -->
+            <div class="mb-3">
+              <label class="form-label" for="age">Age</label>
+              <input type="number" class="form-control" id="age" name="age"
+                     min="16" max="100" step="1"
+                     value="{{ defaults.get('age', 30) }}">
+            </div>
+
+            <!-- Gender -->
+            <div class="mb-3">
+              <label class="form-label" for="gender">Gender</label>
+              <select class="form-select" id="gender" name="gender">
+                {% set g = (defaults.get('gender','male')|lower) %}
+                <option value="male"   {{ 'selected' if g=='male' else '' }}>Male</option>
+                <option value="female" {{ 'selected' if g=='female' else '' }}>Female</option>
+              </select>
+            </div>
+
+            <!-- Vehicle Year -->
+            <div class="mb-3">
+              <label class="form-label" for="vehicle_year">Vehicle Year</label>
+              <input type="number" class="form-control" id="vehicle_year" name="vehicle_year"
+                     min="1990" max="2025" step="1"
+                     value="{{ defaults.get('vehicle_year', 2020) }}">
+            </div>
+
+            <!-- Vehicle Type -->
+            <div class="mb-3">
+              <label class="form-label" for="vehicle_type">Vehicle Type</label>
+              <select class="form-select" id="vehicle_type" name="vehicle_type">
+                {% set vt = (defaults.get('vehicle_type','sedan')|lower) %}
+                <option value="sedan"       {{ 'selected' if vt=='sedan' else '' }}>sedan</option>
+                <option value="suv"         {{ 'selected' if vt=='suv' else '' }}>suv</option>
+                <option value="truck"       {{ 'selected' if vt=='truck' else '' }}>truck</option>
+                <option value="van"         {{ 'selected' if vt=='van' else '' }}>van</option>
+                <!-- include this only if your training data had "sports car" exactly -->
+                <option value="sports car"  {{ 'selected' if vt=='sports car' else '' }}>sports car</option>
+              </select>
+            </div>
+
+            <!-- Annual Mileage -->
+            <div class="mb-3">
+              <label class="form-label" for="annual_mileage">Annual Mileage</label>
+              <input type="number" class="form-control" id="annual_mileage" name="annual_mileage"
+                     min="0" step="100"
+                     value="{{ defaults.get('annual_mileage', 8000) }}">
+            </div>
+
+            <!-- Credit Score -->
+            <div class="mb-3">
+              <label class="form-label" for="credit_score">Credit Score (0–1)</label>
+              <input type="number" class="form-control" id="credit_score" name="credit_score"
+                     min="0" max="1" step="0.01"
+                     value="{{ defaults.get('credit_score', 0.9) }}">
+            </div>
+
+            <!-- Past Accidents -->
+            <div class="mb-3">
+              <label class="form-label" for="past_accidents">Past Accidents</label>
+              <input type="number" class="form-control" id="past_accidents" name="past_accidents"
+                     min="0" step="1"
+                     value="{{ defaults.get('past_accidents', 0) }}">
+            </div>
+
+            <!-- Speeding Violations -->
+            <div class="mb-3">
+              <label class="form-label" for="speeding_violations">Speeding Violations</label>
+              <input type="number" class="form-control" id="speeding_violations" name="speeding_violations"
+                     min="0" step="1"
+                     value="{{ defaults.get('speeding_violations', 0) }}">
+            </div>
+
+            <!-- DUIs (lowercase name!) -->
+            <div class="mb-3">
+              <label class="form-label" for="duis">DUIs</label>
+              <input type="number" class="form-control" id="duis" name="duis"
+                     min="0" step="1"
+                     value="{{ defaults.get('duis', 0) }}">
+            </div>
+
+            <!-- Married (send yes/no lowercase; app maps to 1/0) -->
+            <div class="mb-4">
+              <label class="form-label" for="married">Married</label>
+              {% set m = (defaults.get('married','yes')|lower) %}
+              <select class="form-select" id="married" name="married">
+                <option value="yes" {{ 'selected' if m=='yes' else '' }}>Yes</option>
+                <option value="no"  {{ 'selected' if m=='no'  else '' }}>No</option>
+              </select>
+            </div>
+
+            <div class="d-grid">
+              <button class="btn btn-primary btn-lg" type="submit">Predict</button>
+            </div>
+          </form>
+
+          <div class="text-muted small mt-3">
+            <em>Tip:</em> All dropdown values are sent in <strong>lowercase</strong> to match the model encodings.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
